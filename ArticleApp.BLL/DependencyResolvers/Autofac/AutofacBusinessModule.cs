@@ -1,6 +1,4 @@
-﻿using ArticleApp.BLL.Abstract;
-using ArticleApp.BLL.Concrete;
-using Autofac;
+﻿using Autofac;
 
 namespace ArticleApp.BLL.DependencyResolvers.Autofac
 {
@@ -8,7 +6,15 @@ namespace ArticleApp.BLL.DependencyResolvers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<AuthManager>().As<IAuthManager>();
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+            //builder.RegisterAssemblyTypes(System.Reflection.Assembly.Load("DataAccess"))
+            //    .Where(type => type.Namespace.Contains("Repositories"))
+            //    .AsImplementedInterfaces();
+
+            builder.RegisterAssemblyTypes(assembly)
+                .Where(type => type.Namespace.Contains("Concrete"))
+                .AsImplementedInterfaces();
         }
     }
 }
